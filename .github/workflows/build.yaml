@@ -1,0 +1,94 @@
+name: Build Docker Container & Push to DO Registry
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CLUSTER_NAME: django-k8s
+    steps:
+      - uses: actions/checkout@v2
+      # - name: Insall doctl
+      #   uses: digitalocean/action-doctl@v2
+      #   with:
+      #     token: ${{ secrets.DO_API_TOKEN_KEY }}
+      # - name: Login to DO Container Registry with short-lived creds
+      #   run: doctl registry login --expiry-seconds 1200
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+
+
+      - name: Build the Docker image
+        # working-directory: .
+        run: |
+          docker build -f Dockerfile \
+              -t elghibaomar/vuejs-k8s-web-welcome:latest \
+              -t elghibaomar/vuejs-k8s-web-welcome:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} \
+              .
+# - name: Build container image
+#         working-directory: ./web
+#         run: |
+#           docker build -f Dockerfile \
+#             -t registry.digitalocean.com/om-k8s/django-k8s-web:latest \
+#             -t registry.digitalocean.com/om-k8s/django-k8s-web:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} \
+# #             .
+
+          
+      
+#       - name: Docker Push
+#         run: docker push elghibaomar/vuejs-k8s-web-final --all-tags
+
+#       - name: K8s cluster kubeconfig file with/ short-lived creds
+#         run: |
+#           doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER_NAME }}
+
+#       - name: Update Deployment image
+#         run: |
+#           kubectl set image deployment/vuejs-k8s-web-final-deployment vuejs-k8s-web-final=elghibaomar/vuejs-k8s-web-final:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5}
+
+#       - name: Wait for rollout to finish
+#         run: |
+#           kubectl rollout status deployment/vuejs-k8s-web-final-deployment
+
+
+
+
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
+      # - name: docker login
+      # - name: Login to DO Container Registry with short-lived creds
+      #   run: doctl registry login --expiry-seconds 1200
+      # - name: Build container image
+      #   run: |
+      #     docker build -f Dockerfile \
+      #       -t registry.digitalocean.com/om-k8s/vuejs-k8s-web:latest \
+      #       -t registry.digitalocean.com/om-k8s/vuejs-k8s-web:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} \
+      #       .
+      # - name: Push image
+      #   run: |
+      #     docker push registry.digitalocean.com/om-k8s/vuejs-k8s-web --all-tags
+      # - name: K8s cluster kubeconfig file with/ short-lived creds
+      #   run: |
+      #     doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER_NAME }}
+
+      # - name: Deployment image
+      #   run: |
+      #     kubectl apply -f k8s/apps/vuejs-k8s-web.yaml  
+      # - name: Update Deployment image
+      #   run: |
+      #     kubectl set image deployment/vuejs-k8s-web-deployment vuejs-k8s-web=registry.digitalocean.com/om-k8s/vuejs-k8s-web:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5}
+      # - name: Wait for rollout to finish
+      #   run: |
+      #     kubectl rollout status deployment/vuejs-k8s-web-deployment
