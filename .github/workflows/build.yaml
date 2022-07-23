@@ -15,12 +15,12 @@ jobs:
       CLUSTER_NAME: django-k8s
     steps:
       - uses: actions/checkout@v2
-      # - name: Insall doctl
-      #   uses: digitalocean/action-doctl@v2
-      #   with:
-      #     token: ${{ secrets.DO_API_TOKEN_KEY }}
-      # - name: Login to DO Container Registry with short-lived creds
-      #   run: doctl registry login --expiry-seconds 1200
+      - name: Insall doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN_KEY }}
+      - name: Login to DO Container Registry with short-lived creds
+        run: doctl registry login --expiry-seconds 1200
 
       - name: docker login
         env:
@@ -50,17 +50,17 @@ jobs:
       - name: Docker Push
         run: docker push elghibaomar/vuejs-k8s-web-welcome --all-tags
 
-#       - name: K8s cluster kubeconfig file with/ short-lived creds
-#         run: |
-#           doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER_NAME }}
+      - name: K8s cluster kubeconfig file with/ short-lived creds
+        run: |
+          doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER_NAME }}
 
-#       - name: Update Deployment image
-#         run: |
-#           kubectl set image deployment/vuejs-k8s-web-final-deployment vuejs-k8s-web-final=elghibaomar/vuejs-k8s-web-final:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5}
+      - name: Update Deployment image
+        run: |
+          kubectl set image deployment/vuejs-k8s-web-welcome-deployment vuejs-k8s-web-welcome=elghibaomar/vuejs-k8s-web-welcome:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5}
 
-#       - name: Wait for rollout to finish
-#         run: |
-#           kubectl rollout status deployment/vuejs-k8s-web-final-deployment
+      - name: Wait for rollout to finish
+        run: |
+          kubectl rollout status deployment/vuejs-k8s-web-welcome-deployment
 
 
 

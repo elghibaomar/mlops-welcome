@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vuejs-k8s-web-welcome-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: vuejs-k8s-web-welcome-deployment
+  template:
+    metadata:
+      labels:
+        app: vuejs-k8s-web-welcome-deployment
+    spec:
+      containers:
+        - name: vuejs-k8s-web-welcome
+          image: elghibaomar/vuejs-k8s-web-welcome:latest
+          env:
+            - name: PORT
+              value: "8085"
+          ports:
+          - containerPort: 8085
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vuejs-k8s-web-welcome-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8085
+  selector:
+    app: vuejs-k8s-web-welcome-deployment
+
+
+
+
+
+
