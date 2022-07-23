@@ -74,7 +74,7 @@ export default {
     return {
       heroContent: {
         heroImage: require(`@/assets/images/hero/MLOPS.MA.png`),
-        heroMobileImage: require(`@/assets/images/hero/img-mobile.jpg`),
+        heroMobileImage: require(`@/assets/images/hero/mlops-mobile.png`),
         heroTitleName: "MLOPS.MA",
         heroDesignation: "Smart Platform",
         heroDescriptions: `Machine Learning Operations For Marketing Platform`,
