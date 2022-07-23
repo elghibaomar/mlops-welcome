@@ -13,6 +13,8 @@ RUN npm install npm@latest -g
 
 # install project dependencies
 
+RUN npm install popperjs/core
+
 RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
