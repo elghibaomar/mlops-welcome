@@ -3,6 +3,8 @@ FROM node:lts-alpine
 # install simple http server for serving static content
 RUN npm install -g http-server
 
+RUN npm install popperjs/core@2.11.15
+
 # make the 'app' folder the current working directory
 WORKDIR /app
 
@@ -13,7 +15,6 @@ RUN npm install npm@latest -g
 
 # install project dependencies
 
-RUN npm install popperjs/core@2.11.15
 
 RUN npm install
 
