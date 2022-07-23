@@ -13,7 +13,7 @@ RUN npm install npm@latest -g
 
 # install project dependencies
 
-RUN npm install popperjs/core
+# RUN npm install popperjs/core
 
 RUN npm install
 
